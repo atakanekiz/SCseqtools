@@ -53,7 +53,7 @@ gsea_plotter(
 
 \item{reference_cluster}{Same as sample_cluster but for reference (right side of the enrichment plots)}
 
-\item{method}{Specify method to use for gene ranking. It can be one of the following: "s2n" (default), "ttest", "difference", "ratio", "welch", "mwt", "bws". See PMID: 18344518}
+\item{method}{Specify method to use for gene ranking. It can be one of the following: 's2n' (default), 'ttest', 'difference', 'ratio', 'welch', 'mwt', 'bws'. See PMID: 18344518}
 
 \item{gene_set}{reference pathway sets. a list object}
 

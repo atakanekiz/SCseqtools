@@ -32,7 +32,7 @@ gene_ranker(
 
 \item{reference_cluster}{Same as sample_cluster but for reference (right side of the enrichment plots)}
 
-\item{method}{Specify method to use for gene ranking. It can be one of the following: "s2n" (default), "ttest", "difference", "ratio", "welch", "mwt", "bws". See PMID: 18344518}
+\item{method}{Specify method to use for gene ranking. It can be one of the following: 's2n' (default), 'ttest', 'difference', 'ratio', 'welch', 'mwt', 'bws'. See PMID: 18344518}
 
 \item{save_ranked_object}{Logical. Set to TRUE for keeping ranking results as a global variable}
 
@@ -43,9 +43,9 @@ A function to rank genes between two subsets of scRNAseq data. It uses multiple 
 }
 \examples{
 s2n_ranked <- gene_ranker(exprs = exprs,
-                          pos_marker = c("Cd3e", "Cd8a"), neg_marker = "Cd4",
-                          sample_id = "young|middle_age", reference_id = "old_age",
-                          method = "s2n")
+                          pos_marker = c('Cd3e', 'Cd8a'), neg_marker = 'Cd4',
+                          sample_id = 'young|middle_age', reference_id = 'old_age',
+                          method = 's2n')
 
 
 

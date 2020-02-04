@@ -30,7 +30,7 @@ top_plotter(
 \item{do.plot}{Logical. Set it to TRUE to create graphical outputs.}
 }
 \description{
-A function to speed up plotting GSEA results. Use this function with previously generated "gene rankings" and "gsea results"
+A function to speed up plotting GSEA results. Use this function with previously generated 'gene rankings' and 'gsea results'
 }
 \examples{
 

@@ -3,22 +3,34 @@
 #' @export
 #'
 #' @import Seurat
-#' @import tibble
-#' @import dplyr
 #'
+#' @importFrom tibble add_column
+#' @importFrom dplyr pull
+#' @importFrom dplyr filter
+#' @importFrom dplyr filter_
+#' @importFrom dplyr select
 #' @importFrom magrittr %>%
 #'
-#' @description A function to obtain a simple data frame containing gene expression, sample and cluster information from Seurat object for programmatic plotting. This function is written for Seurat v3 objects.
+#' @description A function to obtain a simple data frame containing gene
+#' expression, sample and cluster information from Seurat object for
+#' programmatic plotting. This function is written for Seurat v3 objects.
 #'
 #' @param seurat_obj A Seurat object to extract from
 #'
-#' @param metadata_to_extract A named character vector to pull metadata information from the Seurat object. The names provided here will constitute column names in the extracted data frame. The items of the character vector should match the column names of the `seurat_obj@metadata` data frame.
+#' @param metadata_to_extract A named character vector to pull metadata
+#' information from the Seurat object. The names provided here will constitute
+#' column names in the extracted data frame. The items of the character vector
+#' should match the column names of the `seurat_obj@metadata` data frame.
 #'
-#' @param assay Specify assay data that should be extracted from `seurat_obj`. If `NULL`, the default assay will be extracted
+#' @param assay Specify assay data that should be extracted from `seurat_obj`.
+#' If `NULL`, the default assay will be extracted
 #'
-#' @param slot Specify data slot within the `Assay` that should be used. If `NULL`, `data` (normalized data) slot will be extracted
+#' @param slot Specify data slot within the `Assay` that should be used.
+#' If `NULL`, `data` (normalized data) slot will be extracted
 #'
-#' @param humanize Logical. Set to `TRUE` to convert gene names to human names. This is useful to generate GSEA-ready data frames to be used with MSigDB gene lists. See below for method for humanization.
+#' @param humanize Logical. Set to `TRUE` to convert gene names to human names.
+#'  This is useful to generate GSEA-ready data frames to be used with MSigDB
+#'  gene lists. See below for method for humanization.
 #'
 #' @param humanize_method Select how to perform gene conversion. Could be one of the following "uppercase", "biomart". When "uppercase" is selected, gene names are converted to uppercase letters which would be suitable for most of the gene conversions from mouse to human. This is a quick conversion that does not require biomart matching. When this parameter is set to "biomart", Ensembl-Biomart database is searched for annotated orthologs. This parameters does not matter when `humanize = FALSE`.
 #'

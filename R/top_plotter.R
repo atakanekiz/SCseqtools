@@ -1,6 +1,6 @@
 #' top_plotter
 #'
-#' @description A function to speed up plotting GSEA results. Use this function with previously generated "gene rankings" and "gsea results"
+#' @description A function to speed up plotting GSEA results. Use this function with previously generated 'gene rankings' and 'gsea results'
 #'
 #' @import data.table
 #'
@@ -30,23 +30,16 @@
 #'
 
 
-top_plotter <- function(gsea_results = NULL,
-                        ranked_genes = NULL,
-                        gene_set = NULL,
-                        top_n = 10,
-                        gseaParam = 1,
-                        plot_title = NULL,
-                        do.plot = T) {
-
-    topPathwaysUp <- gsea_results[ES > 0][head(order(pval), n=top_n), pathway]
-
-        topPathwaysDown <- gsea_results[ES < 0][head(order(pval), n=top_n), pathway]
-
+top_plotter <- function(gsea_results = NULL, ranked_genes = NULL, gene_set = NULL, top_n = 10, gseaParam = 1, plot_title = NULL, do.plot = T) {
+    
+    topPathwaysUp <- gsea_results[ES > 0][head(order(pval), n = top_n), pathway]
+    
+    topPathwaysDown <- gsea_results[ES < 0][head(order(pval), n = top_n), pathway]
+    
     topPathways <- c(topPathwaysUp, rev(topPathwaysDown))
-
-    plotGseaTable2(gene_set[topPathways], ranked_genes, gsea_results,
-                   gseaParam = gseaParam, plot_title=plot_title, do.plot = do.plot)
-
+    
+    plotGseaTable2(gene_set[topPathways], ranked_genes, gsea_results, gseaParam = gseaParam, plot_title = plot_title, do.plot = do.plot)
+    
 }
 
 

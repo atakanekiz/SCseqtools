@@ -16,13 +16,20 @@ df_extractor(
 \arguments{
 \item{seurat_obj}{A Seurat object to extract from}
 
-\item{metadata_to_extract}{A named character vector to pull metadata information from the Seurat object. The names provided here will constitute column names in the extracted data frame. The items of the character vector should match the column names of the `seurat_obj@metadata` data frame.}
+\item{metadata_to_extract}{A named character vector to pull metadata
+information from the Seurat object. The names provided here will constitute
+column names in the extracted data frame. The items of the character vector
+should match the column names of the `seurat_obj@metadata` data frame.}
 
-\item{assay}{Specify assay data that should be extracted from `seurat_obj`. If `NULL`, the default assay will be extracted}
+\item{assay}{Specify assay data that should be extracted from `seurat_obj`.
+If `NULL`, the default assay will be extracted}
 
-\item{slot}{Specify data slot within the `Assay` that should be used. If `NULL`, `data` (normalized data) slot will be extracted}
+\item{slot}{Specify data slot within the `Assay` that should be used.
+If `NULL`, `data` (normalized data) slot will be extracted}
 
-\item{humanize}{Logical. Set to `TRUE` to convert gene names to human names. This is useful to generate GSEA-ready data frames to be used with MSigDB gene lists. See below for method for humanization.}
+\item{humanize}{Logical. Set to `TRUE` to convert gene names to human names.
+This is useful to generate GSEA-ready data frames to be used with MSigDB
+gene lists. See below for method for humanization.}
 
 \item{humanize_method}{Select how to perform gene conversion. Could be one of the following "uppercase", "biomart". When "uppercase" is selected, gene names are converted to uppercase letters which would be suitable for most of the gene conversions from mouse to human. This is a quick conversion that does not require biomart matching. When this parameter is set to "biomart", Ensembl-Biomart database is searched for annotated orthologs. This parameters does not matter when `humanize = FALSE`.}
 }
@@ -30,7 +37,9 @@ df_extractor(
 A data frame containing genes in columns, and cells/observations in the rows. This data frame can be directly used for ggplot-friendly plotting
 }
 \description{
-A function to obtain a simple data frame containing gene expression, sample and cluster information from Seurat object for programmatic plotting. This function is written for Seurat v3 objects.
+A function to obtain a simple data frame containing gene
+expression, sample and cluster information from Seurat object for
+programmatic plotting. This function is written for Seurat v3 objects.
 }
 \examples{
 

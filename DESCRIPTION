@@ -11,3 +11,8 @@ LazyData: true
 biocViews:
 Imports: gtools, dplyr, stringr, purrr, colorspace, gtools, ggplot2
 RoxygenNote: 7.0.2
+Suggests: 
+    testthat,
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr

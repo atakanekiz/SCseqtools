@@ -1,28 +1,26 @@
-#' gsea_plotter
+#' gsea_replot
 #'
-#' @description A wrapper function to create gsea plots.
+#' @description # This is a function to speed up GSEA plotting in batch execution. A global gsea_res object will be created by using gsea_plotter function. This script is an excerpt from gsea_plotter function to recycle results file to create graphs quickly. Only the graphing engine is used from gsea_plotter function preventing recalculation of the results.
 #'
 #' @export
 #'
-#' @importFrom gridExtra grid.arrange
-#' @importFrom stringr str_replace_all
 #' @importFrom dplyr pull
 #' @importFrom dplyr filter
 #' @importFrom dplyr filter_
 #' @importFrom dplyr select
+#' @importFrom gridExtra grid.arrange
 #'
-#' @import ggplot2
 #' @import fgsea
+#' @import ggplot2
+
 #'
-#' @param exprs
-#'
-#' @param preranked_genes
+#' @param res Previously calculated gsea results (global object created with `gsea_plotter()` works)
 #'
 #' @param pos_marker A character vector of gene names to positively gate cells (cells expressing these genes will be included in sample and reference)
 #'
 #' @param neg_marker A character vector of gene names to negatively gate cells (cells expressing these genes will be excluded from sample and reference )
 #'
-#' @param sample_id String. Name of the samples to use for the ranking. As the genes will be ranked from sample to reference in decreasing order, samples will be on the left side of enrichment plots. Regex based string matching can be applied including logic operations such as `|`. Data for this parameter should match to entries under `sample` column from the `expr` data frame.
+#' @param sample_id String. Name of the samples to use for the ranking. As the genes will be ranked from sample to reference in decreasing order, samples will be on the left side of enrichment plots. Regex based string matching can be applied including logic operations such as `|`. Data for this parameter should match to entries under `sample` column from the `expr` data frame. Make sure you escape special characters such as parantheses and periods.
 #'
 #' @param sample_cluster Which clusters to include in the analysis. Data for this parameter should match to entried under `cluster` column from `expr` data frame.
 #'
@@ -30,63 +28,42 @@
 #'
 #' @param reference_cluster Same as sample_cluster but for reference (right side of the enrichment plots)
 #'
-#' @param method Specify method to use for gene ranking. It can be one of the following: 's2n' (default), 'ttest', 'difference', 'ratio', 'welch', 'mwt', 'bws'. See PMID: 18344518
+#' @param gene_set A geneset (list object) by which gsea is calculated.  Can be one of 'hallmark'go', 'curated', 'immune', 'motif', 'all'. Or the user can provide a list object containing reference genesets.
 #'
-#' @param gene_set reference pathway sets. a list object
+#' @param gseaParam fgsea parameter for changing the bar size in top-plots
 #'
-#' @param nperm The number of permutations to use in analysis
+#' @param plot_individual String to plot enrichment results for a desired pathway. Must be an exact match to gene list
 #'
-#' @param minSize Minimum number of overlapping genes to consider a pathway in analysis
+#' @param append_title Add informative titles to the enrichment plot
 #'
-#' @param maxSize Maximum number of overallping genes to consider a pathway in analysis
+#' @param top_plots_title Add informative titles to summary enrichment plots
 #'
-#' @param top_n Specificy how many of the top enriched pathways are shown
+#' @param save_png Export image as png
 #'
-#' @param gseaParam fgsea parameter to change bar sizes
+#' @param png_units Png size units. Defults to 'in'
 #'
-#' @param plot_individual Select pathway to plot
+#' @param png_width Png width. Defaults to 4
 #'
-#' @param append_title Add informative titles to individual plots
+#' @param png_height Png height. Defaults to 3
 #'
-#' @param top_plots_totle Add informative titles to summary plots
+#' @param append_to_filename Add custom string to png file
 #'
-#' @param seed Random seed
+#' @param verbose Logical. Tells you what's going on
 #'
-#' @param keep_results Logical to store results globally
+#' @param annot_text_color Color of the NES-p val annotations on graph. You can use `adjustcolor('red', alpha.f = 0)` to hide annotation text (by making it transparent)
 #'
-#' @param save_png Save resulting plot as png
+#' @param annot_text_size Size of the NES-p val annotations on graph
 #'
-#' @param png_units Png size units
-#'
-#' @param png_width width
-#'
-#' @param png_height height
-#'
-#' @param append_to_filename Custom string to add to png file
-#'
-#' @param verbose Prints the analysis details
-#'
-#' @param annot_text_color color of NES-p val annotation text
-#'
-#' @param annot_text_size size of NES-pval annotation text
-#'
-#' @param annot_text_fontface fontface of annotation text (1,2,3,4, plain-bold-italic-bold and italic)
-#'
-#'
+#' @param annot_text_font Fontface of the annotation text (1,2,3,4, plain-bold-italic-bold and italic)
 #'
 #'
 #'
 
 
-gsea_plotter <- function(exprs = NULL, preranked_genes = NULL, pos_marker = NULL, neg_marker = NULL, sample_id = NULL, sample_cluster = NULL,
-    reference_id = NULL, reference_cluster = NULL, method = "s2n", gene_set = "hallmark", nperm = 10000, minSize = 50, maxSize = 500, top_n = 10,
-    gseaParam = 1, plot_individual = NULL, append_title = F, top_plots_title = T, seed = 123, keep_results = T, save_png = F, png_units = "in",
-    png_width = 4, png_height = 3, append_to_filename = "", verbose = T, annot_text_color = "black", annot_text_size = 4, annot_text_fontface = 2) {
+gsea_replot <- function(res = NULL, pos_marker = NULL, neg_marker = NULL, sample_id = NULL, sample_cluster = NULL, reference_id = NULL, reference_cluster = NULL,
+    gene_set = "hallmark", gseaParam = 1, plot_individual = NULL, append_title = T, top_plots_title = T, save_png = F, png_units = "in", png_width = 4,
+    png_height = 3, append_to_filename = "", verbose = T, annot_text_color = "black", annot_text_size = 4, annot_text_fontface = 2) {
 
-    set.seed(seed)
-
-
-    # Read molecular signatures database (MSigDB) gene lists. files must be stored
 
     if (gene_set == "hallmark") {
 
@@ -114,33 +91,8 @@ gsea_plotter <- function(exprs = NULL, preranked_genes = NULL, pos_marker = NULL
 
     } else {
         gene_set = gene_set
-    }  # can pass a named list composing of genes as character vectors in each list element
-
-    if (is.null(reference_cluster))
-        {
-            reference_cluster <- sample_cluster
-        }  # Specify only sample_cluster for subsetting on the same clusters in sample and reference
-
-    if (!is.null(preranked_genes)) {
-
-        ranked_genes = preranked_genes
-
-    } else {
-
-        ranked_genes <- gene_ranker(exprs = exprs, pos_marker = pos_marker, neg_marker = neg_marker, sample_id = sample_id, sample_cluster = sample_cluster,
-            reference_id = reference_id, reference_cluster = reference_cluster, method = method, verbose = verbose)
     }
 
-    if (keep_results) assign("ranked_genes", ranked_genes, .GlobalEnv)
-
-
-
-
-
-    res <- fgsea(pathways = gene_set, stats = ranked_genes, nperm = nperm, minSize = minSize, maxSize = maxSize)
-
-    if (keep_results)
-        assign("gsea_res", res, .GlobalEnv)
 
     if (is.null(plot_individual)) {
 
@@ -169,7 +121,6 @@ gsea_plotter <- function(exprs = NULL, preranked_genes = NULL, pos_marker = NULL
 
 
     } else {
-
 
         hits <- c(grep(plot_individual, res$pathway, ignore.case = T, value = T))
 
@@ -243,7 +194,7 @@ gsea_plotter <- function(exprs = NULL, preranked_genes = NULL, pos_marker = NULL
             annot_padj <- signif(as.numeric(res[res$pathway == hits, "padj"]), digits = 2)
             annot_NES <- signif(as.numeric(res[res$pathway == hits, "NES"]), digits = 2)
             annot_ES <- signif(as.numeric(res[res$pathway == hits, "ES"]), digits = 2)
-            x_pos <- length(ranked_genes)/4
+            x_pos <- length(ranked_genes)/5
 
             # grob<- grobTree(textGrob(paste('adj.p: ', annot_padj, '\nNES:', annot_NES), x= 0.1, y=annot_ES, hjust = 0, gp = gpar(col='red',
             # fontsize=3, fontface='italic')))
@@ -321,16 +272,4 @@ gsea_plotter <- function(exprs = NULL, preranked_genes = NULL, pos_marker = NULL
         }  #else grid.arrange(plot_grob)
 
 }
-
-############################################################################################################## # Examples of using master_gsea function
-
-# setwd(dirname(rstudioapi::getActiveDocumentContext()$path)) exprs <- readRDS('aging_exprs.rds')
-
-# exprs <- readRDS('aging_exprs.rds')
-
-# gsea_plotter(exprs, sample_id = 'Young \\(WT\\)', reference_id = 'Aged \\(WT\\)', sample_cluster = 'NK', reference_cluster = 'NK',
-# gene_set = 'hallmark')
-
-
-
 

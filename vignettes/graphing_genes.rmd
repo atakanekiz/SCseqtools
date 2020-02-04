@@ -1,0 +1,155 @@
+---
+title: "graphing_genes"
+output: rmarkdown::html_vignette
+vignette: >
+%\VignetteIndexEntry{graphing_genes}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+  ---
+  
+  ```{r, include = FALSE}
+knitr::opts_chunk$set(
+collapse = TRUE,
+comment = "#>"
+)
+```
+
+```{r setup}
+library(SCseqtools)
+```
+
+## Create sample data frame
+
+A sample data frame from an experiment containing
+
+- 1000 observations (i.e. cells in rows)
+- 4 samples (under `sample` column)
+- **Values:** `control` , `drug1`, `drug2`, `combo`
+- 5 single cell clusters
+- **Values:** `t_cell`, `b_cell`, `nk_cell`, `monocyte`, `macrophage`
+- 6 genes (as variables in columns)
+- **Values:** `CD8A`, `CD4`, `IFNG`, `GZMB`, `ARG1`, `NOS2`
+
+
+```{r}
+
+set.seed(123)
+
+dat <- data.frame(
+  sample = factor(
+    rep(c("control", "drug1", "drug2", "combo"), each=250),
+    levels = c("control", "drug1", "drug2", "combo")),
+  cluster= rep(c("t_cell", "b_cell", "nk_cell", "monocyte", "macrophage"), each=50),
+  CD8A = sample(seq(0,1, by=0.2),1000, replace = T ),
+  CD4 = sample(seq(0,1, by=0.2),1000, replace = T ),
+  IFNG = rnorm(1000, 5, 5), GZMB = rnorm(1000, 5, 5),
+  ARG1 = rnorm(1000, 5, 5), NOS2 = rnorm(1000, 5, 5))
+
+
+dat[dat$sample == "drug1", 5:8 ] <- dat[dat$sample == "drug1", 5:8 ] + 1
+dat[dat$sample == "drug2", 5:8 ] <- dat[dat$sample == "drug2", 5:8 ] + 3
+
+dat[dat$sample == "combo", 5:8 ] <- dat[dat$sample == "combo", 5:8 ] + 15
+
+head(dat)  
+
+```
+
+## Example plots
+
+### Plot genes for `t_cell` cluster
+
+```{r, fig.width=5, fig.height=3}
+
+gene_grapher(dat, 
+             genes_to_plot = c("IFNG", "GZMB"), 
+             colors_to_use = c("orange", "gray", "red", "steelblue"),
+             clusters_to_plot = "t_cell",
+             image_columns = 2, image_rows = 1, 
+             add_mean = T, mean_color = "white",
+             add_median=F)
+
+```
+
+### Plot genes for CD8a+CD4- cells
+
+```{r, fig.width=5, fig.height=3}
+
+
+gene_grapher(dat, 
+             genes_to_plot = c("IFNG", "GZMB"), 
+             pos_marker = "CD8A",neg_marker = "CD4",
+             colors_to_use = c("orange", "gray", "red", "steelblue"),
+             image_columns = 2, image_rows = 1, 
+             add_mean = T, mean_color = "white",
+             add_median=F)
+
+```
+
+
+### Plot genes for CD8a+CD4+ cells
+
+```{r, fig.width=5, fig.height=3}
+
+
+gene_grapher(dat, 
+             c("IFNG", "GZMB"), 
+             pos_marker = c("CD8A", "CD4"),
+             colors_to_use = c("orange", "gray", "red", "steelblue"),
+             image_columns = 2, image_rows = 1, 
+             add_mean = T, mean_color = "white",
+             add_median=F)
+
+```
+
+### Plot genes for unsubsetted data
+
+```{r, fig.width=5, fig.height=3}
+
+# Use regex matching to find genes in columns
+
+genes <- grep("cd4|arg", colnames(dat), ignore.case = T, value = T)
+
+gene_grapher(dat, 
+             genes_to_plot = genes, 
+             colors_to_use = c("orange", "gray", "red", "steelblue"),
+             image_columns = 2, image_rows = 1, 
+             add_mean = T, mean_color = "white",
+             add_median=F)
+
+
+```
+
+
+
+## Flexible graphing options
+
+### Remove stats
+
+```{r}
+
+gene_grapher(dat, 
+             genes_to_plot = genes, 
+             colors_to_use = c("orange", "gray", "red", "steelblue"),
+             image_columns = 2, image_rows = 1, 
+             add_mean = T, mean_color = "white",
+             add_median=F,
+             show_stats = F)
+
+```
+
+
+### Plot gene expression per cluster
+
+```{r}
+
+gene_grapher(dat, 
+             x_variable = "cluster",
+             genes_to_plot = genes, 
+             colors_to_use = c("orange", "gray", "red", "steelblue", "purple"),
+             image_columns = 2, image_rows = 1, 
+             add_mean = T, mean_color = "white",
+             add_median=F,
+             show_stats = F) 
+
+```

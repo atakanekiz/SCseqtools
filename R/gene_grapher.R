@@ -3,11 +3,18 @@
 #' @export
 #'
 #' @importFrom magrittr %>%
+#' @importFrom dplyr pull
+#' @importFrom dplyr filter
+#' @importFrom dplyr filter_
+#' @importFrom dplyr select
+#' @importFrom stringr str_replace_all
+#' @importFrom gtools mixedsort
+#' @importFrom purrr set_names
 #'
 #' @import ggpubr
-#' @import dplyr
-#' @import stringr
-#' @import purrr
+#' @import ggplot2
+#'
+
 #' @import colorspace
 #' @import gtools
 #'
@@ -142,9 +149,9 @@ gene_grapher <- function(exprs,
                          y_expand_low = 0,
                          y_expand_high = 0.2,
                          pval_y_offset = 5/6,
-                         save_pdf = T,
+                         save_pdf = F,
                          append_to_filename = "",
-                         output_plot = F,
+                         output_plot = T,
                          assign_global_plotlist = F,
                          show_progress = F,
                          image_columns = 4,
