@@ -82,7 +82,7 @@
 #'
 #' @param image_rows Controls the number of figure rows on one output page (defaul is 4)
 #'
-#' @param ... not used currently.
+#' @param ... other parameters to pass to gg
 #'
 #' @return Graphical outputs showing gene expression per sample or cluster
 #'
@@ -299,7 +299,7 @@ gene_grapher <- function(exprs,
 
 
             p <- ggpubr::ggboxplot(exprs, x= x_variable, y = gene, fill = x_variable, palette = colors_to_use,
-                           title = gene, ylab="Expression", outlier.shape=NA, xlab = F)+
+                           title = gene, ylab="Expression", outlier.shape=NA, xlab = F, ...)+
                 ggpubr::rremove("legend")+
                 ggpubr::rotate_x_text(angle=45)
 
@@ -309,7 +309,7 @@ gene_grapher <- function(exprs,
 
             p <- ggpubr::ggbarplot(exprs, x= x_variable, y = gene, fill = x_variable, palette = colors_to_use,
                            title = gene, ylab="Expression",
-                           add =  "mean_se" , xlab = F)+
+                           add =  "mean_se" , xlab = F, ...)+
                 ggpubr::rremove("legend")+
                 ggpubr::rotate_x_text(angle=45)
 
@@ -320,7 +320,7 @@ gene_grapher <- function(exprs,
 
 
             p <- ggpubr::ggviolin(exprs, x= x_variable, y = gene, fill = x_variable, palette = colors_to_use,
-                          title = gene, ylab="Expression",  scale="width", trim = T)+ #draw_quantiles = c(0.25, 0.5, 0.75) can be added for marking IQR and median
+                          title = gene, ylab="Expression",  scale="width", trim = T, ...)+ #draw_quantiles = c(0.25, 0.5, 0.75) can be added for marking IQR and median
                 ggpubr::rremove("legend")+
                 ggpubr::rotate_x_text(angle=45)
 
