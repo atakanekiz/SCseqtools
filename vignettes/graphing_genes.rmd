@@ -2,9 +2,9 @@
 title: "graphing_genes"
 output: rmarkdown::html_vignette
 vignette: >
-%\VignetteIndexEntry{graphing_genes}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
+ %\VignetteIndexEntry{graphing_genes}
+ %\VignetteEngine{knitr::rmarkdown}
+ %\VignetteEncoding{UTF-8}
 ---
   
 ```{r, include = FALSE}
