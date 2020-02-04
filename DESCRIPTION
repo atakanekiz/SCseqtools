@@ -1,6 +1,6 @@
 Package: SCseqtools
 Type: Package
-Title: Deal With Your Highthroughput Data With Ease
+Title: Deal With Your Single Cell RNAseq Data With Ease
 Version: 0.1.0
 Author: Atakan Ekiz
 Maintainer: Atakan Ekiz <atakanekiz@gmail.com>
@@ -8,6 +8,7 @@ Description: A collection of functions that facilitate highthroughput data analy
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
+Depends: R (>= 3.5.0)
 biocViews:
 Imports: gtools, dplyr, stringr, purrr, colorspace, gtools, ggplot2
 RoxygenNote: 7.0.2
