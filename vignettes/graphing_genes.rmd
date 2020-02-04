@@ -124,6 +124,73 @@ gene_grapher(dat,
 
 ## Flexible graphing options
 
+### Specify comparisons to show
+
+```{r}
+
+gene_grapher(dat, 
+             genes_to_plot = c("ARG1", "NOS2"), 
+             plot_type = "box",
+             comparisons = list(c("control", "drug1"), 
+                                c("control", "drug2"), 
+                                c("control", "combo")),
+             colors_to_use = c("orange", "gray", "red", "steelblue"),
+             image_columns = 2, image_rows = 1, 
+             add_mean = T, mean_color = "white",
+             add_median=F)
+
+```
+
+
+### Violin plots
+
+```{r}
+
+gene_grapher(dat, 
+             genes_to_plot = c("ARG1", "NOS2"), 
+             plot_type = "violin",
+             colors_to_use = c("orange", "gray", "red", "steelblue"),
+             image_columns = 2, image_rows = 1, 
+             add_mean = T, mean_color = "white",
+             add_median=F)
+
+
+```
+
+
+### Bar plots
+
+```{r}
+
+gene_grapher(dat, 
+             genes_to_plot = c("ARG1", "NOS2"), 
+             plot_type = "bar",
+             colors_to_use = c("orange", "gray", "red", "steelblue"),
+             image_columns = 2, image_rows = 1, 
+             add_mean = T, mean_color = "white",
+             add_median=F)
+
+
+```
+
+### Message which gene is being plotted
+
+This could be helpful to track progress if a long lists of genes are being plotted. Also, it can help pinpoint where the plotting encounters a problem (e.g. nothing to plot with the current subsetting approach)
+
+```{r}
+
+gene_grapher(dat, 
+             genes_to_plot = c("ARG1", "NOS2"), 
+             plot_type = "box",show_progress = T, 
+             colors_to_use = c("orange", "gray", "red", "steelblue"),
+             image_columns = 2, image_rows = 1, 
+             add_mean = T, mean_color = "white",
+             add_median=F)
+
+
+```
+
+
 ### Remove stats
 
 ```{r}
@@ -153,3 +220,28 @@ gene_grapher(dat,
              show_stats = F) 
 
 ```
+
+### Assign global plot object for further manipulations
+
+```{r}
+
+suppressPackageStartupMessages(library(ggplot2))
+
+gene_grapher(dat, 
+             genes_to_plot = c("ARG1", "NOS2"), 
+             plot_type = "violin", assign_global_plotlist = T,
+             colors_to_use = c("orange", "gray", "red", "steelblue"),
+             image_columns = 2, image_rows = 1, output_plot = F,
+             add_mean = T, mean_color = "white",
+             add_median=F)
+
+
+plot_list[[1]] + 
+  theme(axis.text.x = element_text(color = "red"),
+        axis.text.y = element_text(color="blue")) + 
+  labs(title = paste(names(plot_list)[1], "New plot title"))
+  
+
+
+```
+
