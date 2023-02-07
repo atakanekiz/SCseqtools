@@ -29,9 +29,9 @@ gene_grapher(
   y_expand_low = 0,
   y_expand_high = 0.2,
   pval_y_offset = 5/6,
-  save_pdf = T,
+  save_pdf = F,
   append_to_filename = "",
-  output_plot = F,
+  output_plot = T,
   assign_global_plotlist = F,
   show_progress = F,
   image_columns = 4,
@@ -102,7 +102,7 @@ gene_grapher(
 
 \item{image_rows}{Controls the number of figure rows on one output page (defaul is 4)}
 
-\item{...}{not used currently.}
+\item{...}{other parameters to pass to gg}
 }
 \value{
 Graphical outputs showing gene expression per sample or cluster

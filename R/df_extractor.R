@@ -42,7 +42,7 @@
 #' metadata_to_extract = c(Cluster="new.idents", Sample = "group"),
 #' humanize = F)
 #'
-#' #'   exprs_hum <- df_extractor(seurat_obj,
+#'   exprs_hum <- df_extractor(seurat_obj,
 #' metadata_to_extract = c(Cluster="new.idents", Sample = "group"),
 #' humanize = T, humanize_method = "uppercase")
 #'
@@ -107,7 +107,24 @@ df_extractor <- function(seurat_obj,
 
     } else if (humanize_method == "uppercase"){
 
-        rownames(exprs) <- toupper(rownames(exprs))
+        newnames <- toupper(rownames(exprs))
+
+        if(anyDuplicated(newnames) == 0){
+
+            rownames(exprs) <- newnames
+
+        } else {
+
+            dups <- duplicated(newnames)
+
+            newnames <- newnames[!dups]
+
+            exprs <- exprs[!dups,]
+
+            rownames(exprs) <- newnames
+        }
+
+
 
 
     } else stop("If humanize=T, humanize_method can be one of 'uppercase' or 'biomart'")

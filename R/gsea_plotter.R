@@ -14,9 +14,9 @@
 #' @import ggplot2
 #' @import fgsea
 #'
-#' @param exprs
+#' @param exprs A data frame containing the gene expression values, samples and cluster information (in columns) from single cells (rows). It must include lower case column name for `sample` and `cluster`. This can be generated from a Seurat object using `df_extractor` function.
 #'
-#' @param preranked_genes
+#' @param preranked_genes A named numeric vector for ranked gene expression values. This can be obtained using `gene_ranker` function. When this is provided, the arguments for subsetting and ranking `exprs` data frame is ignored. The idea behind this argument is to speed up GSEA analyses on the same ranked gene expression data using different gene sets without the need to recalculate the ranking in each iteration.
 #'
 #' @param pos_marker A character vector of gene names to positively gate cells (cells expressing these genes will be included in sample and reference)
 #'
@@ -32,15 +32,9 @@
 #'
 #' @param method Specify method to use for gene ranking. It can be one of the following: 's2n' (default), 'ttest', 'difference', 'ratio', 'welch', 'mwt', 'bws'. See PMID: 18344518
 #'
-#' @param gene_set reference pathway sets. a list object
+#' @param gene_set reference pathway sets. It can be one of "all", "hallmark", "go", "curated", "immune", "motif", or a named list object containing genes for specific pathways.
 #'
-#' @param nperm The number of permutations to use in analysis
-#'
-#' @param minSize Minimum number of overlapping genes to consider a pathway in analysis
-#'
-#' @param maxSize Maximum number of overallping genes to consider a pathway in analysis
-#'
-#' @param top_n Specificy how many of the top enriched pathways are shown
+#' @param top_n Specify how many of the top enriched pathways are shown
 #'
 #' @param gseaParam fgsea parameter to change bar sizes
 #'
@@ -48,7 +42,7 @@
 #'
 #' @param append_title Add informative titles to individual plots
 #'
-#' @param top_plots_totle Add informative titles to summary plots
+#' @param top_plots_title Add informative titles to summary plots
 #'
 #' @param seed Random seed
 #'
@@ -72,23 +66,27 @@
 #'
 #' @param annot_text_fontface fontface of annotation text (1,2,3,4, plain-bold-italic-bold and italic)
 #'
-#'
+#' @param ... Additional parameters to pass into fgsea function call. This can include things like nperm (omit for the recommended `fgseaMultilevel` call, provide a value for `fgseaSimple` function call), minSize, maxSize etc.
 #'
 #'
 #'
 
 
 gsea_plotter <- function(exprs = NULL, preranked_genes = NULL, pos_marker = NULL, neg_marker = NULL, sample_id = NULL, sample_cluster = NULL,
-    reference_id = NULL, reference_cluster = NULL, method = "s2n", gene_set = "hallmark", nperm = 10000, minSize = 50, maxSize = 500, top_n = 10,
+    reference_id = NULL, reference_cluster = NULL, method = "s2n", gene_set = "hallmark", top_n = 10,
     gseaParam = 1, plot_individual = NULL, append_title = F, top_plots_title = T, seed = 123, keep_results = T, save_png = F, png_units = "in",
-    png_width = 4, png_height = 3, append_to_filename = "", verbose = T, annot_text_color = "black", annot_text_size = 4, annot_text_fontface = 2) {
+    png_width = 4, png_height = 3, append_to_filename = "", verbose = T, annot_text_color = "black", annot_text_size = 4, annot_text_fontface = 2, ...) {
 
     set.seed(seed)
 
 
     # Read molecular signatures database (MSigDB) gene lists. files must be stored
 
-    if (gene_set == "hallmark") {
+    if (!gene_set %in% c("hallmark", "go", "curated", "immune", "motif", "all")) {
+        gene_set = gene_set
+      # can pass a named list composing of genes as character vectors in each list element
+
+    } else if (gene_set == "hallmark") {
 
         gene_set <- msigdb_hallmark
 
@@ -112,9 +110,7 @@ gsea_plotter <- function(exprs = NULL, preranked_genes = NULL, pos_marker = NULL
 
         gene_set <- msigdb_all
 
-    } else {
-        gene_set = gene_set
-    }  # can pass a named list composing of genes as character vectors in each list element
+}
 
     if (is.null(reference_cluster))
         {
@@ -137,7 +133,7 @@ gsea_plotter <- function(exprs = NULL, preranked_genes = NULL, pos_marker = NULL
 
 
 
-    res <- fgsea(pathways = gene_set, stats = ranked_genes, nperm = nperm, minSize = minSize, maxSize = maxSize)
+    res <- fgsea(pathways = gene_set, stats = ranked_genes, ...)
 
     if (keep_results)
         assign("gsea_res", res, .GlobalEnv)

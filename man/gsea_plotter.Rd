@@ -15,9 +15,6 @@ gsea_plotter(
   reference_cluster = NULL,
   method = "s2n",
   gene_set = "hallmark",
-  nperm = 10000,
-  minSize = 50,
-  maxSize = 500,
   top_n = 10,
   gseaParam = 1,
   plot_individual = NULL,
@@ -33,13 +30,14 @@ gsea_plotter(
   verbose = T,
   annot_text_color = "black",
   annot_text_size = 4,
-  annot_text_fontface = 2
+  annot_text_fontface = 2,
+  ...
 )
 }
 \arguments{
-\item{exprs}{}
+\item{exprs}{A data frame containing the gene expression values, samples and cluster information (in columns) from single cells (rows). It must include lower case column name for `sample` and `cluster`. This can be generated from a Seurat object using `df_extractor` function.}
 
-\item{preranked_genes}{}
+\item{preranked_genes}{A named numeric vector for ranked gene expression values. This can be obtained using `gene_ranker` function. When this is provided, the arguments for subsetting and ranking `exprs` data frame is ignored. The idea behind this argument is to speed up GSEA analyses on the same ranked gene expression data using different gene sets without the need to recalculate the ranking in each iteration.}
 
 \item{pos_marker}{A character vector of gene names to positively gate cells (cells expressing these genes will be included in sample and reference)}
 
@@ -55,21 +53,17 @@ gsea_plotter(
 
 \item{method}{Specify method to use for gene ranking. It can be one of the following: 's2n' (default), 'ttest', 'difference', 'ratio', 'welch', 'mwt', 'bws'. See PMID: 18344518}
 
-\item{gene_set}{reference pathway sets. a list object}
+\item{gene_set}{reference pathway sets. It can be one of "all", "hallmark", "go", "curated", "immune", "motif", or a named list object containing genes for specific pathways.}
 
-\item{nperm}{The number of permutations to use in analysis}
-
-\item{minSize}{Minimum number of overlapping genes to consider a pathway in analysis}
-
-\item{maxSize}{Maximum number of overallping genes to consider a pathway in analysis}
-
-\item{top_n}{Specificy how many of the top enriched pathways are shown}
+\item{top_n}{Specify how many of the top enriched pathways are shown}
 
 \item{gseaParam}{fgsea parameter to change bar sizes}
 
 \item{plot_individual}{Select pathway to plot}
 
 \item{append_title}{Add informative titles to individual plots}
+
+\item{top_plots_title}{Add informative titles to summary plots}
 
 \item{seed}{Random seed}
 
@@ -93,7 +87,7 @@ gsea_plotter(
 
 \item{annot_text_fontface}{fontface of annotation text (1,2,3,4, plain-bold-italic-bold and italic)}
 
-\item{top_plots_totle}{Add informative titles to summary plots}
+\item{...}{Additional parameters to pass into fgsea function call. This can include things like nperm (omit for the recommended `fgseaMultilevel` call, provide a value for `fgseaSimple` function call), minSize, maxSize etc.}
 }
 \description{
 A wrapper function to create gsea plots.

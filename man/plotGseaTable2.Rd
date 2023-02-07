@@ -30,5 +30,5 @@ plotGseaTable2(
 \item{do.plot}{Logical. Set it to TRUE to create graphical outputs.}
 }
 \description{
-This function plots a GSEA results. The function was edited from fgsea package to enable to graph naming
+This function plots GSEA results. The function was edited from fgsea package to enable to graph naming
 }

@@ -11,7 +11,7 @@ LazyData: true
 Depends: R (>= 3.5.0)
 biocViews:
 Imports: gtools, dplyr, stringr, purrr, colorspace, gtools, ggplot2, Seurat, data.table, fgsea, data.table, ggpubr, grid, gridExtra
-RoxygenNote: 7.0.2
+RoxygenNote: 7.1.1
 Suggests:
     testthat,
     knitr,

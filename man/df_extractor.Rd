@@ -47,7 +47,7 @@ programmatic plotting. This function is written for Seurat v3 objects.
 metadata_to_extract = c(Cluster="new.idents", Sample = "group"),
 humanize = F)
 
-#'   exprs_hum <- df_extractor(seurat_obj,
+  exprs_hum <- df_extractor(seurat_obj,
 metadata_to_extract = c(Cluster="new.idents", Sample = "group"),
 humanize = T, humanize_method = "uppercase")
 
