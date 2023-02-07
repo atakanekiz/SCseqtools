@@ -34,7 +34,11 @@
 #'
 #' @param gene_set reference pathway sets. It can be one of "all", "hallmark", "go", "curated", "immune", "motif", or a named list object containing genes for specific pathways.
 #'
-#' @param top_n Specify how many of the top enriched pathways are shown
+#' @param minSize Minimum number of overlapping genes to consider a pathway in analysis
+#'
+#' @param maxSize Maximum number of overallping genes to consider a pathway in analysis
+#'
+#' @param top_n Specificy how many of the top enriched pathways are shown
 #'
 #' @param gseaParam fgsea parameter to change bar sizes
 #'
@@ -73,7 +77,7 @@
 
 
 gsea_plotter <- function(exprs = NULL, preranked_genes = NULL, pos_marker = NULL, neg_marker = NULL, sample_id = NULL, sample_cluster = NULL,
-    reference_id = NULL, reference_cluster = NULL, method = "s2n", gene_set = "hallmark", top_n = 10,
+    reference_id = NULL, reference_cluster = NULL, method = "s2n", gene_set = "hallmark", minSize = 50, maxSize = 500, top_n = 10,
     gseaParam = 1, plot_individual = NULL, append_title = F, top_plots_title = T, seed = 123, keep_results = T, save_png = F, png_units = "in",
     png_width = 4, png_height = 3, append_to_filename = "", verbose = T, annot_text_color = "black", annot_text_size = 4, annot_text_fontface = 2, ...) {
 
@@ -133,7 +137,8 @@ gsea_plotter <- function(exprs = NULL, preranked_genes = NULL, pos_marker = NULL
 
 
 
-    res <- fgsea(pathways = gene_set, stats = ranked_genes, ...)
+
+    res <- fgsea(pathways = gene_set, stats = ranked_genes, minSize = minSize, maxSize = maxSize, ...)
 
     if (keep_results)
         assign("gsea_res", res, .GlobalEnv)
