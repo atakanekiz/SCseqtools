@@ -32,7 +32,7 @@
 #'
 #' @param method Specify method to use for gene ranking. It can be one of the following: 's2n' (default), 'ttest', 'difference', 'ratio', 'welch', 'mwt', 'bws'. See PMID: 18344518
 #'
-#' @param gene_set reference pathway sets. It can be one of "all", "hallmark", "go", "curated", "immune", "motif", or a named list object containing genes for specific pathways.
+#' @param gene_set reference pathways. It should be a named list object with character vector of gene names. A custom list can be provided or one of the pre-loaded lists can be selected: msigdb_all, msigdb_curated, msigdb_go, msigdb_hallmark (default), msigdb_immune, msigdb_motif.
 #'
 #' @param minSize Minimum number of overlapping genes to consider a pathway in analysis
 #'
@@ -77,7 +77,7 @@
 
 
 gsea_plotter <- function(exprs = NULL, preranked_genes = NULL, pos_marker = NULL, neg_marker = NULL, sample_id = NULL, sample_cluster = NULL,
-    reference_id = NULL, reference_cluster = NULL, method = "s2n", gene_set = "hallmark", minSize = 50, maxSize = 500, top_n = 10,
+    reference_id = NULL, reference_cluster = NULL, method = "s2n", gene_set = msigdb_hallmark, minSize = 50, maxSize = 500, top_n = 10,
     gseaParam = 1, plot_individual = NULL, append_title = F, top_plots_title = T, seed = 123, keep_results = T, save_png = F, png_units = "in",
     png_width = 4, png_height = 3, append_to_filename = "", verbose = T, annot_text_color = "black", annot_text_size = 4, annot_text_fontface = 2, ...) {
 
@@ -85,36 +85,11 @@ gsea_plotter <- function(exprs = NULL, preranked_genes = NULL, pos_marker = NULL
 
 
     # Read molecular signatures database (MSigDB) gene lists. files must be stored
-
-    if (!gene_set %in% c("hallmark", "go", "curated", "immune", "motif", "all")) {
-        gene_set = gene_set
-      # can pass a named list composing of genes as character vectors in each list element
-
-    } else if (gene_set == "hallmark") {
-
-        gene_set <- msigdb_hallmark
-
-    } else if (gene_set == "go") {
-
-        gene_set <- msigdb_go
-
-    } else if (gene_set == "curated") {
-
-        gene_set <- msigdb_curated
-
-    } else if (gene_set == "immune") {
-
-        gene_set <- msigdb_immune
-
-    } else if (gene_set == "motif") {
-
-        gene_set <- msigdb_motif
-
-    } else if (gene_set == "all") {
-
-        gene_set <- msigdb_all
-
-}
+    # if (gene_set == "hallmark") {
+    #
+    #     gene_set <- msigdb_hallmark
+    #
+    # }
 
     if (is.null(reference_cluster))
         {
