@@ -65,33 +65,12 @@ gsea_replot <- function(res = NULL, pos_marker = NULL, neg_marker = NULL, sample
     png_height = 3, append_to_filename = "", verbose = T, annot_text_color = "black", annot_text_size = 4, annot_text_fontface = 2) {
 
 
-    if (gene_set == "hallmark") {
-
-        gene_set <- msigdb_hallmark
-
-    } else if (gene_set == "go") {
-
-        gene_set <- msigdb_go
-
-    } else if (gene_set == "curated") {
-
-        gene_set <- msigdb_curated
-
-    } else if (gene_set == "immune") {
-
-        gene_set <- msigdb_immune
-
-    } else if (gene_set == "motif") {
-
-        gene_set <- msigdb_motif
-
-    } else if (gene_set == "all") {
-
-        gene_set <- msigdb_all
-
-    } else {
-        gene_set = gene_set
-    }
+    # Read molecular signatures database (MSigDB) gene lists. files must be stored
+    # if (gene_set == "hallmark") {
+    #
+    #     gene_set <- msigdb_hallmark
+    #
+    # }
 
 
     if (is.null(plot_individual)) {
