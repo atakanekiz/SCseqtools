@@ -16,6 +16,8 @@
 #'
 #' @param res Previously calculated gsea results (global object created with `gsea_plotter()` works)
 #'
+#' @param ranked_genes Named numeric vector of ranked genes (automatically created after gsea_plotter function, or can be provided separately)
+#'
 #' @param pos_marker A character vector of gene names to positively gate cells (cells expressing these genes will be included in sample and reference)
 #'
 #' @param neg_marker A character vector of gene names to negatively gate cells (cells expressing these genes will be excluded from sample and reference )
@@ -60,7 +62,7 @@
 #'
 
 
-gsea_replot <- function(res = NULL, pos_marker = NULL, neg_marker = NULL, sample_id = NULL, sample_cluster = NULL, reference_id = NULL, reference_cluster = NULL,
+gsea_replot <- function(res = NULL, ranked_genes= ranked_genes, pos_marker = NULL, neg_marker = NULL, sample_id = NULL, sample_cluster = NULL, reference_id = NULL, reference_cluster = NULL,
     gene_set = "hallmark", gseaParam = 1, plot_individual = NULL, append_title = T, top_plots_title = T, save_png = F, png_units = "in", png_width = 4,
     png_height = 3, append_to_filename = "", verbose = T, annot_text_color = "black", annot_text_size = 4, annot_text_fontface = 2) {
 
